@@ -1,17 +1,9 @@
+import React from 'react';
+import { StyleSheet } from 'react-native';
 import { Tabs } from 'expo-router';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { Text, StyleSheet } from 'react-native';
-import { useFonts } from 'expo-font';
+import { Icon, Text } from '@ui-kitten/components';
 
 export default function TabLayout() {
-  const [fontsLoaded] = useFonts({
-    'SpaceMono-Regular': require('@/assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  if (!fontsLoaded) {
-    return <Text>Loading fonts ...</Text>;
-  }
-
   return (
     <Tabs
       screenOptions={{
@@ -23,11 +15,11 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Today',
+          tabBarIcon: ({ color, focused }) => (
+            <Icon name={focused ? 'sun' : 'sun-outline'} style={{ color: color }} />
+          ),
           tabBarLabel: ({ color }) => (
             <Text style={[styles.tabBarLabel, { color: color }]}>Today</Text>
-          ),
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? 'sunny-sharp' : 'sunny-outline'} color={color} size={20} />
           ),
         }}
       />
@@ -35,11 +27,11 @@ export default function TabLayout() {
         name="history"
         options={{
           title: 'History',
+          tabBarIcon: ({ color, focused }) => (
+            <Icon name={focused ? 'calendar' : 'calendar-outline'} style={{ color: color }} />
+          ),
           tabBarLabel: ({ color }) => (
             <Text style={[styles.tabBarLabel, { color: color }]}>History</Text>
-          ),
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? 'calendar-sharp' : 'calendar-outline'} color={color} size={20} />
           ),
         }}
       />
@@ -49,7 +41,6 @@ export default function TabLayout() {
 
 const styles = StyleSheet.create({
   tabBarLabel: {
-    fontFamily: 'SpaceMono-Regular',
     fontSize: 10,
   },
 });

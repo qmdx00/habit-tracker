@@ -1,10 +1,14 @@
-import { Text, View, StyleSheet } from "react-native";
+import { StyleSheet, SafeAreaView } from "react-native";
+import { Text, Layout } from "@ui-kitten/components";
 
 export default function Today() {
   return (
-    <View style={styles.container} >
-      <Text>Home</Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <Layout>
+        <Text>Home</Text>
+        <Text>Welcome to UI Kitten</Text>
+      </Layout>
+    </SafeAreaView>
   );
 }
 
