@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { Stack } from "expo-router";
 import { SQLiteProvider } from "expo-sqlite";
 import { StatusBar } from 'expo-status-bar';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import * as eva from '@eva-design/eva';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
@@ -11,7 +12,7 @@ import FallbackLoading from "@/components/FallbackLoading";
 
 export default function RootLayout() {
   return (
-    <>
+    <SafeAreaProvider>
       <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={eva.light}>
         <SQLiteProvider databaseName="test.db" useSuspense={true} >
@@ -24,6 +25,6 @@ export default function RootLayout() {
         </SQLiteProvider>
         <StatusBar style="auto" />
       </ApplicationProvider>
-    </>
+    </SafeAreaProvider>
   );
 }

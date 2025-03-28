@@ -4,7 +4,7 @@ import { Layout, Text } from "@ui-kitten/components";
 export default function Settings() {
   return (
     <SafeAreaView style={styles.container}>
-      <Layout>
+      <Layout style={styles.layout}>
         <Text>Settings</Text>
       </Layout>
     </SafeAreaView>
@@ -14,7 +14,9 @@ export default function Settings() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+  },
+  layout: {
+    flex: 1,
+    width: '100%',
   },
 });

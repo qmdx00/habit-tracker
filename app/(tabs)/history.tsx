@@ -1,10 +1,10 @@
-import { Layout } from "@ui-kitten/components";
-import { StyleSheet, Text, SafeAreaView } from "react-native";
+import { Layout, Text } from "@ui-kitten/components";
+import { SafeAreaView, StyleSheet } from "react-native";
 
 export default function History() {
   return (
     <SafeAreaView style={styles.container}>
-      <Layout>
+      <Layout style={styles.layout}>
         <Text>History</Text>
       </Layout>
     </SafeAreaView>
@@ -14,7 +14,9 @@ export default function History() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+  },
+  layout: {
+    flex: 1,
+    width: '100%',
   },
 });

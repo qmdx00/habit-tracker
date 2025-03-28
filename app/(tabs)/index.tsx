@@ -4,9 +4,8 @@ import { Text, Layout } from "@ui-kitten/components";
 export default function Today() {
   return (
     <SafeAreaView style={styles.container}>
-      <Layout>
+      <Layout style={styles.layout}>
         <Text>Home</Text>
-        <Text>Welcome to UI Kitten</Text>
       </Layout>
     </SafeAreaView>
   );
@@ -15,8 +14,9 @@ export default function Today() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    overflowY: 'scroll'
+  },
+  layout: {
+    flex: 1,
+    width: '100%',
   },
 });
