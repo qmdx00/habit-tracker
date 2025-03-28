@@ -1,13 +1,12 @@
-import { StyleSheet, SafeAreaView } from "react-native";
-import { Text, Layout } from "@ui-kitten/components";
+import { StyleSheet } from "react-native";
+import ThemedLayout from "@/components/ThemedLayout";
+import ThemedText from "@/components/ThemedText";
 
 export default function Today() {
   return (
-    <SafeAreaView style={styles.container}>
-      <Layout style={styles.layout}>
-        <Text>Home</Text>
-      </Layout>
-    </SafeAreaView>
+    <ThemedLayout>
+      <ThemedText category="h5">首页</ThemedText>
+    </ThemedLayout>
   );
 }
 

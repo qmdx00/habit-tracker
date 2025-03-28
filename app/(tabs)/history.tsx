@@ -1,13 +1,12 @@
-import { Layout, Text } from "@ui-kitten/components";
-import { SafeAreaView, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
+import ThemedLayout from "@/components/ThemedLayout";
+import ThemedText from "@/components/ThemedText";
 
 export default function History() {
   return (
-    <SafeAreaView style={styles.container}>
-      <Layout style={styles.layout}>
-        <Text>History</Text>
-      </Layout>
-    </SafeAreaView>
+    <ThemedLayout>
+      <ThemedText category="h5">历史记录</ThemedText>
+    </ThemedLayout>
   )
 }
 
