@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
-import ThemedText from './ThemedText';
+import ThemedText from '@/components/ThemedText';
 
 interface SettingItemProps {
   label: string;

@@ -1,55 +1,91 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import { Toggle, Radio, RadioGroup } from '@ui-kitten/components';
-import { useTheme } from './ThemeContext';
-import ThemedText from './ThemedText';
-import SettingItem from './SettingItem';
-import SettingCard from './SettingCard';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { useTheme } from '@/components/ThemeContext';
+import ThemedText from '@/components/ThemedText';
+import SettingCard from '@/components/SettingCard';
+import { themeConfig } from '@/config/app';
 
 interface ThemeToggleProps {
   cardStyle?: any;
 }
 
+type ThemeOption = 'light' | 'dark' | 'system';
+
 export default function ThemeToggle({ cardStyle }: ThemeToggleProps) {
-  const { theme, actualTheme, toggleTheme, setTheme } = useTheme();
+  const { theme, actualTheme, setTheme } = useTheme();
+  const isDarkMode = actualTheme === 'dark';
+
+  const activeColor = isDarkMode ? themeConfig.primaryColor.dark : themeConfig.primaryColor.light;
+  const inactiveColor = isDarkMode ? themeConfig.borderColor.dark : themeConfig.borderColor.light;
+
+  const options: ThemeOption[] = ['light', 'dark', 'system'];
+  const labels = {
+    light: '浅色',
+    dark: '深色',
+    system: '跟随系统'
+  };
+
+  const handleSelectTheme = (selectedTheme: ThemeOption) => {
+    setTheme(selectedTheme);
+  };
 
   return (
     <SettingCard title="主题设置" style={cardStyle}>
-      <SettingItem label="暗色模式">
-        <Toggle
-          checked={actualTheme === 'dark'}
-          onChange={toggleTheme}
-        />
-      </SettingItem>
+      <ThemedText style={styles.labelText}>选择外观模式</ThemedText>
 
-      <ThemedText style={styles.labelText}>主题选择</ThemedText>
-
-      <RadioGroup
-        selectedIndex={theme === 'light' ? 0 : theme === 'dark' ? 1 : 2}
-        onChange={index => {
-          const themeValues: ['light', 'dark', 'system'] = ['light', 'dark', 'system'];
-          setTheme(themeValues[index]);
-        }}
-      >
-        <Radio style={styles.radioButton}>
-          <ThemedText>浅色</ThemedText>
-        </Radio>
-        <Radio style={styles.radioButton}>
-          <ThemedText>深色</ThemedText>
-        </Radio>
-        <Radio style={styles.radioButton}>
-          <ThemedText>跟随系统</ThemedText>
-        </Radio>
-      </RadioGroup>
+      <View style={styles.radioContainer}>
+        {options.map((option) => (
+          <TouchableOpacity
+            key={option}
+            style={styles.optionContainer}
+            onPress={() => handleSelectTheme(option)}
+            activeOpacity={0.7}
+          >
+            <View style={[
+              styles.radioOuter,
+              { borderColor: theme === option ? activeColor : inactiveColor }
+            ]}>
+              {theme === option && (
+                <View style={[styles.radioInner, { backgroundColor: activeColor }]} />
+              )}
+            </View>
+            <ThemedText style={styles.radioText}>
+              {labels[option]}
+            </ThemedText>
+          </TouchableOpacity>
+        ))}
+      </View>
     </SettingCard>
   );
 }
 
 const styles = StyleSheet.create({
   labelText: {
-    marginBottom: 8,
+    marginBottom: 15,
   },
-  radioButton: {
+  radioContainer: {
+    padding: 5,
+  },
+  optionContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginVertical: 8,
   },
+  radioOuter: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  radioInner: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+  },
+  radioText: {
+    fontSize: 15,
+    marginLeft: 10,
+  }
 });

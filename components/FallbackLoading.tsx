@@ -1,7 +1,7 @@
 import { StyleSheet, ActivityIndicator } from "react-native";
 import { Layout } from "@ui-kitten/components";
-import { useTheme } from "./ThemeContext";
-import ThemedText from "./ThemedText";
+import { useTheme } from "@/components/ThemeContext";
+import ThemedText from "@/components/ThemedText";
 
 export default function FallbackLoading() {
   const { actualTheme } = useTheme();

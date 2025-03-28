@@ -1,7 +1,8 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, ViewStyle } from 'react-native';
 import { Layout } from '@ui-kitten/components';
-import { useTheme } from './ThemeContext';
+import { useTheme } from '@/components/ThemeContext';
+import { themeConfig } from '@/config/app';
 
 interface ThemedLayoutProps {
   children: React.ReactNode;
@@ -12,20 +13,19 @@ interface ThemedLayoutProps {
 export default function ThemedLayout({ children, style, contentContainerStyle }: ThemedLayoutProps) {
   const { actualTheme } = useTheme();
   const isDarkMode = actualTheme === 'dark';
+  const backgroundColor = isDarkMode ? themeConfig.backgroundColor.dark : themeConfig.backgroundColor.light;
 
   return (
-    <SafeAreaView
-      style={[
-        styles.container,
-        { backgroundColor: isDarkMode ? '#121212' : 'white' },
-        style
+    <SafeAreaView style={[
+      styles.container,
+      { backgroundColor },
+      style
+    ]}>
+      <Layout style={[
+        styles.layout,
+        { backgroundColor },
+        contentContainerStyle
       ]}>
-      <Layout
-        style={[
-          styles.layout,
-          { backgroundColor: isDarkMode ? '#121212' : 'white' },
-          contentContainerStyle
-        ]}>
         {children}
       </Layout>
     </SafeAreaView>
