@@ -3,7 +3,8 @@ import { StyleSheet } from 'react-native';
 import { Card, Divider } from '@ui-kitten/components';
 import { useTheme } from '@/components/ThemeContext';
 import ThemedText from '@/components/ThemedText';
-import { themeConfig } from '@/config/app';
+import { getCardBackgroundColor, getDividerColor } from '@/components/ui/cardLoading';
+import { isDarkTheme } from '@/utils/theme/themeUtils';
 
 interface SettingCardProps {
   title: string;
@@ -13,10 +14,10 @@ interface SettingCardProps {
 
 export default function SettingCard({ title, children, style }: SettingCardProps) {
   const { actualTheme } = useTheme();
-  const isDarkMode = actualTheme === 'dark';
+  const isDarkMode = isDarkTheme(actualTheme);
 
-  const backgroundColor = isDarkMode ? themeConfig.cardColor.dark : themeConfig.cardColor.light;
-  const dividerColor = isDarkMode ? themeConfig.borderColor.dark : themeConfig.borderColor.light;
+  const backgroundColor = getCardBackgroundColor(isDarkMode);
+  const dividerColor = getDividerColor(isDarkMode);
 
   return (
     <Card style={[styles.card, { backgroundColor }, style]}>

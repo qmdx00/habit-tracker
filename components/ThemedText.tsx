@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleProp, TextStyle, Text as RNText } from 'react-native';
 import { useTheme } from '@/components/ThemeContext';
-import { themeConfig } from '@/config/app';
+import { getThemeColor, getTextColor, isDarkTheme } from '@/utils/theme/themeUtils';
 
 type TextCategory = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 's1' | 's2' | 'p1' | 'p2' | 'c1' | 'c2';
 
@@ -15,7 +15,7 @@ interface ThemedTextProps {
 
 export default function ThemedText({ children, style, category, color, primary, ...props }: ThemedTextProps) {
   const { actualTheme } = useTheme();
-  const isDarkMode = actualTheme === 'dark';
+  const isDarkMode = isDarkTheme(actualTheme);
 
   let fontSize = 14;
   let fontWeight: 'normal' | 'bold' = 'normal';
@@ -73,9 +73,9 @@ export default function ThemedText({ children, style, category, color, primary, 
   if (color) {
     textColor = color; // 如果提供了自定义颜色，则使用它
   } else if (primary) {
-    textColor = isDarkMode ? themeConfig.primaryColor.dark : themeConfig.primaryColor.light; // 如果是主要文本，使用主题主色
+    textColor = getThemeColor('primaryColor', isDarkMode); // 如果是主要文本，使用主题主色
   } else {
-    textColor = isDarkMode ? 'white' : 'black'; // 默认文本颜色
+    textColor = getTextColor(isDarkMode); // 默认文本颜色
   }
 
   return (

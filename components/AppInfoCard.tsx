@@ -4,7 +4,8 @@ import { useTheme } from '@/components/ThemeContext';
 import ThemedText from '@/components/ThemedText';
 import SettingCard from '@/components/SettingCard';
 import SettingItem from '@/components/SettingItem';
-import { appInfo, themeConfig } from '@/config/app';
+import { appInfo } from '@/config/app';
+import { getThemeColor, isDarkTheme } from '@/utils/theme/themeUtils';
 
 interface AppInfoCardProps {
   style?: any;
@@ -12,9 +13,9 @@ interface AppInfoCardProps {
 
 export default function AppInfoCard({ style }: AppInfoCardProps) {
   const { actualTheme } = useTheme();
-  const isDarkMode = actualTheme === 'dark';
+  const isDarkMode = isDarkTheme(actualTheme);
 
-  const primaryColor = isDarkMode ? themeConfig.primaryColor.dark : themeConfig.primaryColor.light;
+  const primaryColor = getThemeColor('primaryColor', isDarkMode);
 
   const openRepository = () => {
     Linking.openURL(appInfo.repository);

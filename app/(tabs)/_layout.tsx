@@ -1,12 +1,17 @@
 import React from 'react';
-import { StyleSheet, Platform, StatusBar, View } from 'react-native';
+import { View } from 'react-native';
 import { Tabs } from 'expo-router';
-import { Icon, Text } from '@ui-kitten/components';
 import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
 import { useTheme } from '@/components/ThemeContext';
-import { themeConfig } from '@/config/app';
-import ThemedText from '@/components/ThemedText';
-import * as NavigationBar from 'expo-navigation-bar';
+import {
+  getThemeColorByTheme,
+  getInactiveTintColorByTheme,
+  setupAndroidUIByTheme,
+  getTabBarStyleByTheme,
+  getHeaderStyleByTheme,
+  getHeaderTitleStyleByTheme
+} from '@/utils/theme/themeUtils';
+import { getScreenOptions } from '@/components/ui/component';
 
 type TabsConfig = {
   screens: {
@@ -42,70 +47,20 @@ const TabsConfig: TabsConfig = {
 
 export default function TabLayout() {
   const { actualTheme } = useTheme();
-  const isDarkMode = actualTheme === 'dark';
 
-  const backgroundColor = isDarkMode ? themeConfig.backgroundColor.dark : themeConfig.backgroundColor.light;
+  const backgroundColor = getThemeColorByTheme('backgroundColor', actualTheme);
 
   // 为安卓设置状态栏和导航栏颜色
   React.useEffect(() => {
-    if (Platform.OS === 'android') {
-      // 设置状态栏
-      StatusBar.setBackgroundColor(backgroundColor);
-      StatusBar.setBarStyle(isDarkMode ? 'light-content' : 'dark-content');
-
-      // 使用expo-navigation-bar设置底部导航栏颜色
-      const setupNavigationBar = async () => {
-        try {
-          // 设置底部导航栏的背景颜色
-          await NavigationBar.setBackgroundColorAsync(backgroundColor);
-          // 设置底部导航栏按钮的样式（深色模式下为浅色按钮，浅色模式下为深色按钮）
-          await NavigationBar.setButtonStyleAsync(isDarkMode ? 'light' : 'dark');
-          // 确保导航栏不透明
-          await NavigationBar.setVisibilityAsync('visible');
-          // 防止深色模式下出现白色边缘
-          if (isDarkMode) {
-            StatusBar.setTranslucent(false);
-          }
-        } catch (error) {
-          console.warn('设置导航栏颜色失败:', error);
-        }
-      };
-
-      setupNavigationBar();
-    }
-  }, [isDarkMode, backgroundColor]);
+    setupAndroidUIByTheme(actualTheme, backgroundColor);
+  }, [actualTheme, backgroundColor]);
 
   const screenOptions: BottomTabNavigationOptions = {
-    tabBarActiveTintColor: isDarkMode ? themeConfig.primaryColor.dark : themeConfig.primaryColor.light,
-    tabBarInactiveTintColor: isDarkMode ? "#9E9E9E" : "gray",
-    tabBarStyle: {
-      height: 60,
-      paddingBottom: 10,
-      backgroundColor: backgroundColor,
-      borderTopWidth: isDarkMode ? 0 : 1,
-      borderTopColor: isDarkMode ? backgroundColor : themeConfig.borderColor.light,
-      boxShadow: isDarkMode ? '0 0 10px 0 rgba(0, 0, 0, 0.1)' : undefined,
-      elevation: isDarkMode ? 5 : 0,
-      // 添加额外样式以解决可能的白色区域问题
-      ...(Platform.OS === 'android' && isDarkMode && {
-        paddingVertical: 5,
-        marginBottom: -5,
-        borderColor: backgroundColor,
-      }),
-    },
-    headerStyle: {
-      backgroundColor: backgroundColor,
-      elevation: 0,
-      boxShadow: '0 0 10px 0 rgba(0, 0, 0, 0.1)',
-      borderBottomWidth: isDarkMode ? 0 : 1,
-      borderBottomColor: isDarkMode ? backgroundColor : themeConfig.borderColor.light,
-    },
-    headerTitleStyle: {
-      color: isDarkMode ? 'white' : 'black',
-      fontWeight: 'bold',
-      fontSize: 20,
-      letterSpacing: 0.5,
-    },
+    tabBarActiveTintColor: getThemeColorByTheme('primaryColor', actualTheme),
+    tabBarInactiveTintColor: getInactiveTintColorByTheme(actualTheme),
+    tabBarStyle: getTabBarStyleByTheme(actualTheme, backgroundColor),
+    headerStyle: getHeaderStyleByTheme(actualTheme, backgroundColor),
+    headerTitleStyle: getHeaderTitleStyleByTheme(actualTheme),
     headerTitleAlign: 'center',
     headerShadowVisible: false,
     tabBarBackground: () => (
@@ -113,40 +68,19 @@ export default function TabLayout() {
     ),
   };
 
+  const screenItems = getScreenOptions(TabsConfig.screens);
+
   return (
     <View style={{ flex: 1, backgroundColor }}>
       <Tabs screenOptions={screenOptions}>
-        {TabsConfig.screens.map((screen) => (
+        {screenItems.map((screen) => (
           <Tabs.Screen
-            key={screen.name}
+            key={screen.key}
             name={screen.name}
-            options={{
-              title: screen.title,
-              tabBarIcon: ({ color, focused }) => (
-                <Icon
-                  style={styles.tabBarIcon}
-                  fill={color}
-                  name={focused ? screen.tabBarIcon : `${screen.tabBarIcon}-outline`}
-                />
-              ),
-              tabBarLabel: ({ color }) => (
-                <ThemedText
-                  category="p1"
-                  style={{ color: color }}>
-                  {screen.tabBarLabel}
-                </ThemedText>
-              ),
-            }}
+            options={screen.options}
           />
         ))}
       </Tabs>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  tabBarIcon: {
-    width: 24,
-    height: 24,
-  },
-});

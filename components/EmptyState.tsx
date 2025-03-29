@@ -3,6 +3,8 @@ import { StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ThemedText from '@/components/ThemedText';
 import { useTheme } from '@/components/ThemeContext';
+import { getEmptyStateColors } from '@/components/ui/emptyState';
+import { isDarkTheme } from '@/utils/theme/themeUtils';
 
 interface EmptyStateProps {
     icon?: string;
@@ -18,13 +20,12 @@ const EmptyState: React.FC<EmptyStateProps> = ({
     iconSize = 60
 }) => {
     const { actualTheme } = useTheme();
-    const isDarkMode = actualTheme === 'dark';
-    const emptyColor = isDarkMode ? '#555555' : '#cccccc';
-    const textColor = isDarkMode ? '#bbbbbb' : '#999999';
+    const isDarkMode = isDarkTheme(actualTheme);
+    const { iconColor, textColor } = getEmptyStateColors(isDarkMode);
 
     return (
         <View style={styles.emptyContainer}>
-            <Ionicons name={icon as any} size={iconSize} color={emptyColor} />
+            <Ionicons name={icon as any} size={iconSize} color={iconColor} />
             <ThemedText style={styles.emptyText}>{title}</ThemedText>
             {subtitle && (
                 <ThemedText style={[styles.emptySubText, { color: textColor }]}>

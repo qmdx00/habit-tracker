@@ -3,7 +3,8 @@ import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { useTheme } from '@/components/ThemeContext';
 import ThemedText from '@/components/ThemedText';
 import SettingCard from '@/components/SettingCard';
-import { themeConfig } from '@/config/app';
+import { getThemeColor, isDarkTheme } from '@/utils/theme/themeUtils';
+import { getThemeOptionLabels, getThemeOptions } from '@/components/ui/themeToggle';
 
 interface ThemeToggleProps {
   cardStyle?: any;
@@ -13,17 +14,13 @@ type ThemeOption = 'light' | 'dark' | 'system';
 
 export default function ThemeToggle({ cardStyle }: ThemeToggleProps) {
   const { theme, actualTheme, setTheme } = useTheme();
-  const isDarkMode = actualTheme === 'dark';
+  const isDarkMode = isDarkTheme(actualTheme);
 
-  const activeColor = isDarkMode ? themeConfig.primaryColor.dark : themeConfig.primaryColor.light;
-  const inactiveColor = isDarkMode ? themeConfig.borderColor.dark : themeConfig.borderColor.light;
+  const activeColor = getThemeColor('primaryColor', isDarkMode);
+  const inactiveColor = getThemeColor('borderColor', isDarkMode);
 
-  const options: ThemeOption[] = ['light', 'dark', 'system'];
-  const labels = {
-    light: '浅色',
-    dark: '深色',
-    system: '跟随系统'
-  };
+  const options = getThemeOptions();
+  const labels = getThemeOptionLabels();
 
   const handleSelectTheme = (selectedTheme: ThemeOption) => {
     setTheme(selectedTheme);

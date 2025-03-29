@@ -2,7 +2,7 @@ import React from 'react';
 import { SafeAreaView, StyleSheet, ViewStyle } from 'react-native';
 import { Layout } from '@ui-kitten/components';
 import { useTheme } from '@/components/ThemeContext';
-import { themeConfig } from '@/config/app';
+import { getThemeColor, isDarkTheme } from '@/utils/theme/themeUtils';
 
 interface ThemedLayoutProps {
   children: React.ReactNode;
@@ -12,8 +12,8 @@ interface ThemedLayoutProps {
 
 export default function ThemedLayout({ children, style, contentContainerStyle }: ThemedLayoutProps) {
   const { actualTheme } = useTheme();
-  const isDarkMode = actualTheme === 'dark';
-  const backgroundColor = isDarkMode ? themeConfig.backgroundColor.dark : themeConfig.backgroundColor.light;
+  const isDarkMode = isDarkTheme(actualTheme);
+  const backgroundColor = getThemeColor('backgroundColor', isDarkMode);
 
   return (
     <SafeAreaView style={[

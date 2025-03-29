@@ -2,6 +2,8 @@ import React, { createContext, useState, useEffect, useContext } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Appearance, useColorScheme } from 'react-native';
 import { themeConfig } from '@/config/app';
+import { getStatusBarStyle } from '@/utils/theme/statusBarUtils';
+import { isDarkTheme } from '@/utils/theme/themeUtils';
 
 type ThemeType = 'light' | 'dark' | 'system';
 
@@ -42,9 +44,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const toggleTheme = () => {
     if (theme === 'system') {
-      setThemeValue(systemTheme === 'light' ? 'dark' : 'light');
+      setThemeValue(isDarkTheme(systemTheme) ? 'light' : 'dark');
     } else {
-      setThemeValue(theme === 'light' ? 'dark' : 'light');
+      setThemeValue(isDarkTheme(theme) ? 'light' : 'dark');
     }
   };
 
@@ -52,10 +54,12 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setThemeValue(newTheme);
   };
 
+  const statusBarStyle = getStatusBarStyle(actualTheme);
+
   return (
     <ThemeContext.Provider value={{ theme, actualTheme, toggleTheme, setTheme }}>
       {children}
-      <StatusBar style={actualTheme === 'light' ? 'dark' : 'light'} />
+      <StatusBar style={statusBarStyle} />
     </ThemeContext.Provider>
   );
 };
