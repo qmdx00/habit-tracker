@@ -1,25 +1,22 @@
 import { StyleSheet, ActivityIndicator } from "react-native";
 import { Layout } from "@ui-kitten/components";
-import { useTheme } from "@/components/ThemeContext";
-import ThemedText from "@/components/ThemedText";
-import { getLoadingBackgroundColor, getLoadingIndicatorColor } from "@/components/ui/cardLoading";
-import { isDarkTheme } from "@/utils/theme/themeUtils";
+import { useTheme } from "@/components/common/ThemeContext";
+import ThemedText from "@/components/common/ThemedText";
+import { getThemeColorByTheme } from "@/utils/theme/themeUtils";
 
 export default function FallbackLoading() {
   const { actualTheme } = useTheme();
-  const isDarkMode = isDarkTheme(actualTheme);
-
-  const backgroundColor = getLoadingBackgroundColor(isDarkMode);
-  const indicatorColor = getLoadingIndicatorColor(isDarkMode);
+  const themedBackgroundColor = getThemeColorByTheme('backgroundColor', actualTheme);
+  const themedIndicatorColor = getThemeColorByTheme('primaryColor', actualTheme);
 
   return (
     <Layout style={[
       styles.container,
-      { backgroundColor }
+      { backgroundColor: themedBackgroundColor }
     ]}>
       <ActivityIndicator
         size="large"
-        color={indicatorColor}
+        color={themedIndicatorColor}
         style={styles.spinner}
       />
       <ThemedText category="h6" style={styles.text}>

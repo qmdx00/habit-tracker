@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, View, Linking, TouchableOpacity } from 'react-native';
-import { useTheme } from '@/components/ThemeContext';
-import ThemedText from '@/components/ThemedText';
-import SettingCard from '@/components/SettingCard';
-import SettingItem from '@/components/SettingItem';
+import { useTheme } from '@/components/common/ThemeContext';
+import ThemedText from '@/components/common/ThemedText';
+import SettingCard from '@/components/settings/SettingCard';
+import SettingItem from '@/components/settings/SettingItem';
 import { appInfo } from '@/config/app';
-import { getThemeColor, isDarkTheme } from '@/utils/theme/themeUtils';
+import { getThemeColorByTheme } from '@/utils/theme/themeUtils';
 
 interface AppInfoCardProps {
   style?: any;
@@ -13,13 +13,7 @@ interface AppInfoCardProps {
 
 export default function AppInfoCard({ style }: AppInfoCardProps) {
   const { actualTheme } = useTheme();
-  const isDarkMode = isDarkTheme(actualTheme);
-
-  const primaryColor = getThemeColor('primaryColor', isDarkMode);
-
-  const openRepository = () => {
-    Linking.openURL(appInfo.repository);
-  };
+  const themedPrimaryColor = getThemeColorByTheme('primaryColor', actualTheme);
 
   return (
     <SettingCard title="关于应用" style={style}>
@@ -45,8 +39,8 @@ export default function AppInfoCard({ style }: AppInfoCardProps) {
       </SettingItem>
 
       <TouchableOpacity
-        style={[styles.customButton, { backgroundColor: primaryColor }]}
-        onPress={openRepository}
+        style={[styles.customButton, { backgroundColor: themedPrimaryColor }]}
+        onPress={() => Linking.openURL(appInfo.repository)}
         activeOpacity={0.8}
       >
         <ThemedText style={styles.buttonText}>查看源代码</ThemedText>

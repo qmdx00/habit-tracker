@@ -1,7 +1,7 @@
 import { StyleSheet, ScrollView } from "react-native";
-import ThemedLayout from "@/components/ThemedLayout";
-import ThemeToggle from "@/components/ThemeToggle";
-import AppInfoCard from "@/components/AppInfoCard";
+import ThemedLayout from "@/components/common/ThemedLayout";
+import ThemeToggle from "@/components/settings/ThemeToggle";
+import AppInfoCard from "@/components/settings/AppInfoCard";
 
 export default function SettingsScreen() {
   return (

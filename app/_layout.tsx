@@ -7,37 +7,9 @@ import * as eva from '@eva-design/eva';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
 
-import FallbackLoading from "@/components/FallbackLoading";
-import { ThemeProvider, useTheme } from "@/components/ThemeContext";
-import { themeConfig } from "@/config/app";
-
-function ThemedApp() {
-  const { actualTheme } = useTheme();
-  const isDarkMode = actualTheme === 'dark';
-  const backgroundColor = isDarkMode ? themeConfig.backgroundColor.dark : themeConfig.backgroundColor.light;
-  const theme = isDarkMode ? eva.dark : eva.light;
-
-  // NOTE: 设置全局状态栏样式
-  useEffect(() => {
-    StatusBar.setBarStyle(isDarkMode ? 'light-content' : 'dark-content');
-    if (Platform.OS === 'android') {
-      StatusBar.setBackgroundColor(backgroundColor);
-    }
-  }, [isDarkMode, backgroundColor]);
-
-  return (
-    <View style={{ flex: 1, backgroundColor }}>
-      <ApplicationProvider {...eva} theme={theme}>
-        <Suspense fallback={<FallbackLoading />}>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="+not-found" options={{ title: "Not Found" }} />
-          </Stack>
-        </Suspense>
-      </ApplicationProvider>
-    </View>
-  );
-}
+import FallbackLoading from "@/components/common/FallbackLoading";
+import { ThemeProvider, useTheme } from "@/components/common/ThemeContext";
+import { getThemeColorByTheme, isDarkTheme } from "@/utils/theme/themeUtils";
 
 export default function RootLayout() {
   return (
@@ -47,5 +19,32 @@ export default function RootLayout() {
         <ThemedApp />
       </ThemeProvider>
     </SafeAreaProvider>
+  );
+}
+
+function ThemedApp() {
+  const { actualTheme } = useTheme();
+  const theme = isDarkTheme(actualTheme) ? eva.dark : eva.light;
+  const themedBackgroundColor = getThemeColorByTheme('backgroundColor', actualTheme);
+
+  // NOTE: 设置全局状态栏样式
+  useEffect(() => {
+    StatusBar.setBarStyle(isDarkTheme(actualTheme) ? 'light-content' : 'dark-content');
+    if (Platform.OS === 'android') {
+      StatusBar.setBackgroundColor(themedBackgroundColor);
+    }
+  }, [actualTheme, themedBackgroundColor]);
+
+  return (
+    <View style={{ flex: 1, backgroundColor: themedBackgroundColor }}>
+      <ApplicationProvider {...eva} theme={theme}>
+        <Suspense fallback={<FallbackLoading />}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" options={{ title: "Not Found" }} />
+          </Stack>
+        </Suspense>
+      </ApplicationProvider>
+    </View>
   );
 }

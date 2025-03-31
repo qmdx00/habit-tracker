@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
-import ThemedText from '@/components/ThemedText';
+import ThemedText from '@/components/common/ThemedText';
 
 interface SettingItemProps {
   label: string;
@@ -10,7 +10,7 @@ interface SettingItemProps {
 export default function SettingItem({ label, children }: SettingItemProps) {
   return (
     <View style={styles.settingItem}>
-      <ThemedText>{label}</ThemedText>
+      <ThemedText category='p1'>{label}</ThemedText>
       {children}
     </View>
   );

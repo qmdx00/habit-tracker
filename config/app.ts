@@ -14,16 +14,20 @@ export const appInfo = {
 export const themeConfig = {
   defaultTheme: 'system' as 'light' | 'dark' | 'system',
   primaryColor: {
-    light: 'green',
+    light: 'red',
     dark: 'orange',
+  },
+  textColor: {
+    light: '#000000',
+    dark: '#ffffff',
   },
   backgroundColor: {
     light: 'white',
     dark: '#121212',
   },
-  cardColor: {
-    light: 'white',
-    dark: '#1E1E1E',
+  inactiveTextColor: {
+    light: '#666666',
+    dark: '#999999',
   },
   borderColor: {
     light: '#f0f0f0',

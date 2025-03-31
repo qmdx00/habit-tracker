@@ -1,10 +1,9 @@
 import React from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { useTheme } from '@/components/ThemeContext';
-import ThemedText from '@/components/ThemedText';
-import SettingCard from '@/components/SettingCard';
-import { getThemeColor, isDarkTheme } from '@/utils/theme/themeUtils';
-import { getThemeOptionLabels, getThemeOptions } from '@/components/ui/themeToggle';
+import { useTheme } from '@/components/common/ThemeContext';
+import ThemedText from '@/components/common/ThemedText';
+import SettingCard from '@/components/settings/SettingCard';
+import { getThemeColorByTheme } from '@/utils/theme/themeUtils';
 
 interface ThemeToggleProps {
   cardStyle?: any;
@@ -12,26 +11,25 @@ interface ThemeToggleProps {
 
 type ThemeOption = 'light' | 'dark' | 'system';
 
+const themeOptions: ThemeOption[] = ['system', 'light', 'dark'];
+const themeLabels: Record<ThemeOption, string> = {
+  system: '跟随系统',
+  light: '浅色',
+  dark: '深色',
+}
+
 export default function ThemeToggle({ cardStyle }: ThemeToggleProps) {
   const { theme, actualTheme, setTheme } = useTheme();
-  const isDarkMode = isDarkTheme(actualTheme);
-
-  const activeColor = getThemeColor('primaryColor', isDarkMode);
-  const inactiveColor = getThemeColor('borderColor', isDarkMode);
-
-  const options = getThemeOptions();
-  const labels = getThemeOptionLabels();
-
-  const handleSelectTheme = (selectedTheme: ThemeOption) => {
-    setTheme(selectedTheme);
-  };
+  const themedPrimaryColor = getThemeColorByTheme('primaryColor', actualTheme);
+  const themedBorderColor = getThemeColorByTheme('borderColor', actualTheme);
+  const handleSelectTheme = (selectedTheme: ThemeOption) => setTheme(selectedTheme);
 
   return (
     <SettingCard title="主题设置" style={cardStyle}>
-      <ThemedText style={styles.labelText}>选择外观模式</ThemedText>
+      <ThemedText category='p1' style={styles.labelText}>选择外观模式</ThemedText>
 
       <View style={styles.radioContainer}>
-        {options.map((option) => (
+        {themeOptions.map((option) => (
           <TouchableOpacity
             key={option}
             style={styles.optionContainer}
@@ -40,14 +38,14 @@ export default function ThemeToggle({ cardStyle }: ThemeToggleProps) {
           >
             <View style={[
               styles.radioOuter,
-              { borderColor: theme === option ? activeColor : inactiveColor }
+              { borderColor: theme === option ? themedPrimaryColor : themedBorderColor }
             ]}>
               {theme === option && (
-                <View style={[styles.radioInner, { backgroundColor: activeColor }]} />
+                <View style={[styles.radioInner, { backgroundColor: themedPrimaryColor }]} />
               )}
             </View>
-            <ThemedText style={styles.radioText}>
-              {labels[option]}
+            <ThemedText category='p1' style={styles.radioText}>
+              {themeLabels[option]}
             </ThemedText>
           </TouchableOpacity>
         ))}
@@ -82,7 +80,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   radioText: {
-    fontSize: 15,
     marginLeft: 10,
   }
 });

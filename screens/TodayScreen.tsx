@@ -1,6 +1,6 @@
 import { StyleSheet, View } from "react-native";
-import ThemedLayout from "@/components/ThemedLayout";
-import EmptyState from "@/components/EmptyState";
+import ThemedLayout from "@/components/common/ThemedLayout";
+import EmptyState from "@/components/common/EmptyState";
 
 export default function TodayScreen() {
   return (
@@ -19,7 +19,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 16,
   },
-  emptyText: {
-    opacity: 0.6,
-  }
 });

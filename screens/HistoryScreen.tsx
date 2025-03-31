@@ -1,7 +1,6 @@
 import { StyleSheet, View } from "react-native";
-import ThemedLayout from "@/components/ThemedLayout";
-import ThemedText from "@/components/ThemedText";
-import EmptyState from "@/components/EmptyState";
+import ThemedLayout from "@/components/common/ThemedLayout";
+import EmptyState from "@/components/common/EmptyState";
 
 export default function HistoryScreen() {
   return (

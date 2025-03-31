@@ -1,10 +1,9 @@
 import React, { ReactNode } from 'react';
 import { StyleSheet } from 'react-native';
 import { Card, Divider } from '@ui-kitten/components';
-import { useTheme } from '@/components/ThemeContext';
-import ThemedText from '@/components/ThemedText';
-import { getCardBackgroundColor, getDividerColor } from '@/components/ui/cardLoading';
-import { isDarkTheme } from '@/utils/theme/themeUtils';
+import { useTheme } from '@/components/common/ThemeContext';
+import ThemedText from '@/components/common/ThemedText';
+import { getThemeColorByTheme } from '@/utils/theme/themeUtils';
 
 interface SettingCardProps {
   title: string;
@@ -14,15 +13,13 @@ interface SettingCardProps {
 
 export default function SettingCard({ title, children, style }: SettingCardProps) {
   const { actualTheme } = useTheme();
-  const isDarkMode = isDarkTheme(actualTheme);
-
-  const backgroundColor = getCardBackgroundColor(isDarkMode);
-  const dividerColor = getDividerColor(isDarkMode);
+  const themedBackgroundColor = getThemeColorByTheme('backgroundColor', actualTheme);
+  const themedBorderColor = getThemeColorByTheme('borderColor', actualTheme);
 
   return (
-    <Card style={[styles.card, { backgroundColor }, style]}>
+    <Card style={[styles.card, { backgroundColor: themedBackgroundColor }, style]}>
       <ThemedText category="h6" style={styles.sectionTitle}>{title}</ThemedText>
-      <Divider style={[styles.divider, { backgroundColor: dividerColor }]} />
+      <Divider style={[styles.divider, { backgroundColor: themedBorderColor }]} />
       {children}
     </Card>
   );
