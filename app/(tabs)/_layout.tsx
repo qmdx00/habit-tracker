@@ -80,14 +80,13 @@ export default function TabLayout() {
   const themedBorderColor = getThemeColorByTheme('borderColor', actualTheme);
   const themedTextColor = getThemeColorByTheme('textColor', actualTheme);
   const fontStyle = getFontStyleByCategory('h4');
-  const isDarkMode = isDarkTheme(actualTheme);
+  const isDark = isDarkTheme(actualTheme);
 
-  // 添加状态栏组件
   const StatusBarComponent = () => (
     <StatusBar
       translucent={Platform.OS === 'android'}
       backgroundColor="transparent"
-      barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+      barStyle={isDark ? 'light-content' : 'dark-content'}
     />
   );
 
@@ -100,8 +99,8 @@ export default function TabLayout() {
       backgroundColor: themedBackgroundColor,
       borderTopWidth: 1,
       borderTopColor: themedBorderColor,
-      elevation: isDarkMode ? 5 : 0,
-      ...(Platform.OS === 'android' && isDarkMode && {
+      elevation: isDark ? 5 : 0,
+      ...(Platform.OS === 'android' && isDark && {
         paddingVertical: 5,
         marginBottom: -5,
         borderColor: themedBackgroundColor,
