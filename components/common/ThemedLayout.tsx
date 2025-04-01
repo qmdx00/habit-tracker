@@ -2,7 +2,7 @@ import React from 'react';
 import { SafeAreaView, StyleSheet, ViewStyle } from 'react-native';
 import { Layout } from '@ui-kitten/components';
 import { useTheme } from '@/components/common/ThemeContext';
-import { getThemeColorByTheme } from '@/utils/theme/themeUtils';
+import { getThemeColorByTheme } from '@/utils/theme';
 
 interface ThemedLayoutProps {
   children: React.ReactNode;

@@ -4,15 +4,15 @@ import * as NavigationBar from 'expo-navigation-bar';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
 
-import { Icon } from '@ui-kitten/components';
+import { Icon, IconProps } from '@ui-kitten/components';
 import ThemedText from '@/components/common/ThemedText';
 import { useTheme } from '@/components/common/ThemeContext';
-import { getThemeColorByTheme, isDarkTheme, ActualThemeType, getFontStyleByCategory } from '@/utils/theme/themeUtils';
+import { getThemeColorByTheme, isDarkTheme, ActualThemeType, getFontStyleByCategory } from '@/utils/theme';
 
 type TabScreenConfig = {
   name: string;
   title: string;
-  tabBarIcon: string;
+  tabBarIcon: IconProps;
   tabBarLabel: string;
 }
 
@@ -38,24 +38,18 @@ const TabScreens: TabScreenConfig[] = [
 ]
 
 export const setupAndroidUIByTheme = async (actualTheme: ActualThemeType, backgroundColor: string) => {
-  if (Platform.OS !== 'android') return;
-
-  // 设置状态栏
-  StatusBar.setBackgroundColor(backgroundColor);
-  StatusBar.setBarStyle(isDarkTheme(actualTheme) ? 'light-content' : 'dark-content');
+  const isDark = isDarkTheme(actualTheme);
 
   try {
-    // 设置底部导航栏
-    await NavigationBar.setBackgroundColorAsync(backgroundColor);
-    await NavigationBar.setButtonStyleAsync(isDarkTheme(actualTheme) ? 'light' : 'dark');
-    await NavigationBar.setVisibilityAsync('visible');
+    StatusBar.setTranslucent(true);
+    StatusBar.setBackgroundColor('transparent');
+    StatusBar.setBarStyle(isDark ? 'light-content' : 'dark-content', true);
 
-    // 防止深色模式下出现白色边缘
-    if (isDarkTheme(actualTheme)) {
-      StatusBar.setTranslucent(false);
-    }
+    await NavigationBar.setVisibilityAsync('visible');
+    await NavigationBar.setBackgroundColorAsync(backgroundColor);
+    await NavigationBar.setButtonStyleAsync(isDark ? 'light' : 'dark');
   } catch (error) {
-    console.warn('设置导航栏颜色失败:', error);
+    console.warn(error);
   }
 }
 
@@ -85,8 +79,17 @@ export default function TabLayout() {
   const themedPrimaryColor = getThemeColorByTheme('primaryColor', actualTheme);
   const themedBorderColor = getThemeColorByTheme('borderColor', actualTheme);
   const themedTextColor = getThemeColorByTheme('textColor', actualTheme);
-  const fontStyle = getFontStyleByCategory('h3');
+  const fontStyle = getFontStyleByCategory('h4');
   const isDarkMode = isDarkTheme(actualTheme);
+
+  // 添加状态栏组件
+  const StatusBarComponent = () => (
+    <StatusBar
+      translucent={Platform.OS === 'android'}
+      backgroundColor="transparent"
+      barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+    />
+  );
 
   const screenOptions: BottomTabNavigationOptions = {
     tabBarActiveTintColor: themedPrimaryColor,
@@ -127,6 +130,7 @@ export default function TabLayout() {
 
   return (
     <View style={{ flex: 1, backgroundColor: themedBackgroundColor }}>
+      <StatusBarComponent />
       <Tabs screenOptions={screenOptions}>
         {getScreenOptions(TabScreens).map((screen) => (
           <Tabs.Screen

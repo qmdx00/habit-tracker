@@ -1,14 +1,33 @@
-import { StyleSheet, ScrollView } from "react-native";
-import ThemedLayout from "@/components/common/ThemedLayout";
-import ThemeToggle from "@/components/settings/ThemeToggle";
-import AppInfoCard from "@/components/settings/AppInfoCard";
+import React from 'react';
+import { StyleSheet, ScrollView } from 'react-native';
+import { useRouter } from 'expo-router';
+import ThemedLayout from '@/components/common/ThemedLayout';
+import SettingGroup from '@/components/settings/SettingGroup';
+import SettingItem from '@/components/settings/SettingItem';
 
 export default function SettingsScreen() {
+  const router = useRouter();
+
   return (
     <ThemedLayout>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <ThemeToggle cardStyle={styles.card} />
-        <AppInfoCard style={styles.card} />
+        <SettingGroup>
+          <SettingItem
+            label="主题设置"
+            showArrow={true}
+            isLast={true}
+            onPress={() => router.push("../settings/theme")}
+          />
+        </SettingGroup>
+
+        <SettingGroup title="关于">
+          <SettingItem
+            label="关于应用"
+            showArrow={true}
+            isLast={true}
+            onPress={() => router.push("../settings/about")}
+          />
+        </SettingGroup>
       </ScrollView>
     </ThemedLayout>
   );
@@ -16,11 +35,7 @@ export default function SettingsScreen() {
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    paddingTop: 16,
-    paddingBottom: 30,
-  },
-  card: {
-    marginHorizontal: 16,
-    marginBottom: 16,
+    paddingTop: 20,
+    paddingBottom: 40,
   },
 });

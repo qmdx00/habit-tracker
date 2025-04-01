@@ -2,7 +2,7 @@ import { StyleSheet, ActivityIndicator } from "react-native";
 import { Layout } from "@ui-kitten/components";
 import { useTheme } from "@/components/common/ThemeContext";
 import ThemedText from "@/components/common/ThemedText";
-import { getThemeColorByTheme } from "@/utils/theme/themeUtils";
+import { getThemeColorByTheme } from "@/utils/theme";
 
 export default function FallbackLoading() {
   const { actualTheme } = useTheme();

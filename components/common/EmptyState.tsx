@@ -1,14 +1,14 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Icon } from '@ui-kitten/components';
+import { Icon, IconProps } from '@ui-kitten/components';
 import ThemedText from '@/components/common/ThemedText';
 import { useTheme } from '@/components/common/ThemeContext';
-import { getThemeColorByTheme } from '@/utils/theme/themeUtils';
+import { getThemeColorByTheme } from '@/utils/theme';
 
 interface EmptyStateProps {
   title: string;
   subtitle?: string;
-  icon?: string;
+  icon?: IconProps;
 }
 
 const EmptyState: React.FC<EmptyStateProps> = ({

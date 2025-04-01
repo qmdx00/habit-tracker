@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleProp, TextStyle, Text as RNText } from 'react-native';
 import { useTheme } from '@/components/common/ThemeContext';
-import { getThemeColorByTheme, getFontStyleByCategory, FontCategoryType } from '@/utils/theme/themeUtils';
+import { getThemeColorByTheme, getFontStyleByCategory, FontCategoryType } from '@/utils/theme';
 
 interface ThemedTextProps {
   style?: StyleProp<TextStyle>;
