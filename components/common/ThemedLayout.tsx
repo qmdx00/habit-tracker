@@ -1,6 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, ViewStyle } from 'react-native';
-import { Layout } from '@ui-kitten/components';
+import { SafeAreaView, StyleSheet, ViewStyle, View } from 'react-native';
 import { useTheme } from '@/components/common/ThemeContext';
 import { getThemeColorByTheme } from '@/utils/theme';
 
@@ -20,13 +19,13 @@ export default function ThemedLayout({ children, style, contentContainerStyle }:
       { backgroundColor: themedBackgroundColor },
       style
     ]}>
-      <Layout style={[
+      <View style={[
         styles.layout,
         { backgroundColor: themedBackgroundColor },
         contentContainerStyle
       ]}>
         {children}
-      </Layout>
+      </View>
     </SafeAreaView>
   );
 }

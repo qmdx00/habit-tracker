@@ -1,18 +1,23 @@
 import React from 'react';
+import { Platform, StatusBar, StyleSheet, View, TouchableOpacity, Pressable } from 'react-native';
+import { BottomTabNavigationOptions, BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 import { Tabs } from 'expo-router';
 import * as NavigationBar from 'expo-navigation-bar';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
 
-import { Icon, IconProps } from '@ui-kitten/components';
 import ThemedText from '@/components/common/ThemedText';
 import { useTheme } from '@/components/common/ThemeContext';
 import { getThemeColorByTheme, isDarkTheme, ActualThemeType, getFontStyleByCategory } from '@/utils/theme';
 
+type IoniconName = React.ComponentProps<typeof Ionicons>['name'];
+
 type TabScreenConfig = {
   name: string;
   title: string;
-  tabBarIcon: IconProps;
+  tabBarIcon: {
+    focused: IoniconName;
+    unfocused: IoniconName;
+  };
   tabBarLabel: string;
 }
 
@@ -20,19 +25,28 @@ const TabScreens: TabScreenConfig[] = [
   {
     name: "index",
     title: "今日",
-    tabBarIcon: "sun",
+    tabBarIcon: {
+      focused: "sunny",
+      unfocused: "sunny-outline"
+    },
     tabBarLabel: "今日",
   },
   {
     name: "history",
     title: "历史",
-    tabBarIcon: "calendar",
+    tabBarIcon: {
+      focused: "calendar",
+      unfocused: "calendar-outline"
+    },
     tabBarLabel: "历史",
   },
   {
     name: "settings",
     title: "设置",
-    tabBarIcon: "settings",
+    tabBarIcon: {
+      focused: "settings",
+      unfocused: "settings-outline"
+    },
     tabBarLabel: "设置",
   },
 ]
@@ -60,10 +74,10 @@ const getScreenOptions = (config: TabScreenConfig[]) => {
     options: {
       title: screen.title,
       tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => (
-        <Icon
-          fill={color}
-          style={styles.tabBarIcon}
-          name={focused ? screen.tabBarIcon : `${screen.tabBarIcon}-outline`}
+        <Ionicons
+          name={focused ? screen.tabBarIcon.focused : screen.tabBarIcon.unfocused}
+          size={24}
+          color={color}
         />
       ),
       tabBarLabel: ({ color }: { color: string }) => (
@@ -77,7 +91,8 @@ export default function TabLayout() {
   const { actualTheme } = useTheme();
   const themedBackgroundColor = getThemeColorByTheme('backgroundColor', actualTheme);
   const themedPrimaryColor = getThemeColorByTheme('primaryColor', actualTheme);
-  const themedBorderColor = getThemeColorByTheme('borderColor', actualTheme);
+  const themedDividerColor = getThemeColorByTheme('dividerColor', actualTheme);
+  const themedInactiveTextColor = getThemeColorByTheme('inactiveTextColor', actualTheme);
   const themedTextColor = getThemeColorByTheme('textColor', actualTheme);
   const fontStyle = getFontStyleByCategory('h4');
   const isDark = isDarkTheme(actualTheme);
@@ -92,14 +107,23 @@ export default function TabLayout() {
 
   const screenOptions: BottomTabNavigationOptions = {
     tabBarActiveTintColor: themedPrimaryColor,
-    tabBarInactiveTintColor: themedTextColor,
+    tabBarInactiveTintColor: themedInactiveTextColor,
+    tabBarButton: (props: BottomTabBarButtonProps) => (
+      <Pressable
+        {...props}
+        android_ripple={{ color: 'transparent', borderless: true }}
+        style={(state) => [
+          props.style,
+          { opacity: 1 }
+        ]}
+      />
+    ),
     tabBarStyle: {
-      height: 60,
+      height: 65,
       paddingBottom: 10,
       backgroundColor: themedBackgroundColor,
       borderTopWidth: 1,
-      borderTopColor: themedBorderColor,
-      elevation: isDark ? 5 : 0,
+      borderTopColor: themedDividerColor,
       ...(Platform.OS === 'android' && isDark && {
         paddingVertical: 5,
         marginBottom: -5,
@@ -110,7 +134,8 @@ export default function TabLayout() {
       backgroundColor: themedBackgroundColor,
       elevation: 0,
       borderBottomWidth: 1,
-      borderBottomColor: themedBorderColor,
+      borderBottomColor: themedDividerColor,
+      shadowColor: 'transparent',
     },
     headerTitleStyle: {
       color: themedTextColor,
@@ -120,7 +145,6 @@ export default function TabLayout() {
     },
     headerTitleAlign: 'center',
     headerShadowVisible: false,
-    tabBarBackground: () => <React.Fragment />,
   };
 
   React.useEffect(() => {
@@ -142,10 +166,3 @@ export default function TabLayout() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  tabBarIcon: {
-    width: 24,
-    height: 24,
-  },
-})

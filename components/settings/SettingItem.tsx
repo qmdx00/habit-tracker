@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import ThemedText from '@/components/common/ThemedText';
-import { Icon } from '@ui-kitten/components';
 import { useTheme } from '@/components/common/ThemeContext';
 import { getThemeColorByTheme } from '@/utils/theme';
 
@@ -22,21 +22,22 @@ export default function SettingItem({
 }: SettingItemProps) {
   const { actualTheme } = useTheme();
   const themedTextColor = getThemeColorByTheme('textColor', actualTheme);
-  const themedBorderColor = getThemeColorByTheme('borderColor', actualTheme);
+  const themedDividerColor = getThemeColorByTheme('dividerColor', actualTheme);
 
   const content = (
     <View style={[
       styles.container,
-      !isLast && { borderBottomWidth: 0.5, borderBottomColor: themedBorderColor }
+      !isLast && { borderBottomWidth: 0.5, borderBottomColor: themedDividerColor }
     ]}>
       <View style={styles.settingItem}>
         <ThemedText category='p1' style={styles.label}>{label}</ThemedText>
         <View style={styles.rightContainer}>
           {children}
           {showArrow && (
-            <Icon
-              name="chevron-right-outline"
-              fill={themedTextColor}
+            <Ionicons
+              name="chevron-forward-outline"
+              size={20}
+              color={themedTextColor}
               style={styles.arrowIcon}
             />
           )}

@@ -1,8 +1,43 @@
 import { themeConfig } from '@/config/app';
 
-export type ActualThemeType = 'light' | 'dark';
-export type ThemeColorType = 'textColor' | 'backgroundColor' | 'primaryColor' | 'borderColor' | 'inactiveTextColor';
-export type FontCategoryType = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 's1' | 's2' | 'p1' | 'p2' | 'c1' | 'c2';
+/**
+ * 实际主题类型
+ */
+export type ActualThemeType =
+  | 'light'
+  | 'dark';
+
+/**
+ * 主题颜色类型
+ */
+export type ThemeColorType =
+  | 'textColor'
+  | 'backgroundColor'
+  | 'primaryColor'
+  | 'borderColor'
+  | 'inactiveTextColor'
+  | 'secondaryColor'
+  | 'successColor'
+  | 'warningColor'
+  | 'cardBackgroundColor'
+  | 'dividerColor';
+
+/**
+ * 字体类型
+ */
+export type FontCategoryType =
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'h4'
+  | 'h5'
+  | 'h6'
+  | 's1'
+  | 's2'
+  | 'p1'
+  | 'p2'
+  | 'c1'
+  | 'c2';
 
 /**
  * 判断主题类型是否为深色模式
@@ -36,36 +71,31 @@ export const getThemeColorByTheme = (colorType: ThemeColorType, actualTheme: Act
 /**
  * 根据字体类型获取字体大小和字体权重
  * @param category 字体类型
+ * @param isBold 是否加粗
  * @returns 字体大小和字体权重
  */
-export const getFontStyleByCategory = (category: FontCategoryType) => {
+export const getFontStyleByCategory = (category: FontCategoryType, isBold?: boolean) => {
   let fontSize = 14;
-  let fontWeight: 'normal' | 'bold' = 'normal';
+  let fontWeight: 'normal' | 'bold' = isBold ?? false ? 'bold' : 'normal';
 
   switch (category) {
     case 'h1':
       fontSize = 32;
-      fontWeight = 'bold';
       break;
     case 'h2':
       fontSize = 28;
-      fontWeight = 'bold';
       break;
     case 'h3':
       fontSize = 24;
-      fontWeight = 'bold';
       break;
     case 'h4':
       fontSize = 20;
-      fontWeight = 'bold';
       break;
     case 'h5':
       fontSize = 18;
-      fontWeight = 'bold';
       break;
     case 'h6':
       fontSize = 16;
-      fontWeight = 'bold';
       break;
     case 's1':
       fontSize = 15;

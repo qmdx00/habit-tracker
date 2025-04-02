@@ -1,14 +1,16 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Icon, IconProps } from '@ui-kitten/components';
+import { Ionicons } from '@expo/vector-icons';
 import ThemedText from '@/components/common/ThemedText';
 import { useTheme } from '@/components/common/ThemeContext';
 import { getThemeColorByTheme } from '@/utils/theme';
 
+type IoniconName = React.ComponentProps<typeof Ionicons>['name'];
+
 interface EmptyStateProps {
   title: string;
   subtitle?: string;
-  icon?: IconProps;
+  icon?: IoniconName;
 }
 
 const EmptyState: React.FC<EmptyStateProps> = ({
@@ -22,8 +24,8 @@ const EmptyState: React.FC<EmptyStateProps> = ({
 
   return (
     <View style={styles.emptyContainer}>
-      <Icon name={icon} style={styles.emptyIcon} fill={themedInactiveTextColor} />
-      <ThemedText category='h3' style={styles.emptyText}>{title}</ThemedText>
+      <Ionicons name={icon} style={styles.emptyIcon} color={themedInactiveTextColor} size={60} />
+      <ThemedText category='h3' isBold style={styles.emptyText}>{title}</ThemedText>
       {subtitle && (
         <ThemedText category='p1' style={[styles.emptySubText, { color: themedTextColor }]}>
           {subtitle}

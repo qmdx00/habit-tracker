@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, StyleProp, ViewStyle } from 'react-native';
 import { useTheme } from '@/components/common/ThemeContext';
 import ThemedText from '@/components/common/ThemedText';
 import { getThemeColorByTheme, isDarkTheme } from '@/utils/theme';
@@ -7,16 +7,17 @@ import { getThemeColorByTheme, isDarkTheme } from '@/utils/theme';
 interface SettingGroupProps {
   title?: string;
   children: ReactNode;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
 }
 
 export default function SettingGroup({ title, children, style }: SettingGroupProps) {
   const { actualTheme } = useTheme();
-  const themedBackgroundColor = getThemeColorByTheme('backgroundColor', actualTheme);
-  const themedBorderColor = getThemeColorByTheme('borderColor', actualTheme);
+  const isDark = isDarkTheme(actualTheme);
+  const themedCardBgColor = getThemeColorByTheme('cardBackgroundColor', actualTheme);
+  const themedDividerColor = getThemeColorByTheme('dividerColor', actualTheme);
 
   return (
-    <View style={[styles.container, { marginTop: title ? 24 : 12 }, style]}>
+    <View style={[styles.container, { marginTop: title ? 24 : 12 }]}>
       {title && (
         <ThemedText category="p2" style={styles.groupTitle}>
           {title}
@@ -25,10 +26,15 @@ export default function SettingGroup({ title, children, style }: SettingGroupPro
       <View style={[
         styles.card,
         {
-          backgroundColor: themedBackgroundColor,
-          borderColor: themedBorderColor,
-          boxShadow: isDarkTheme(actualTheme) ? '0 0 10px rgba(0, 0, 0, 0.1)' : '0 0 10px rgba(0, 0, 0, 0.05)',
-        }
+          backgroundColor: themedCardBgColor,
+          borderColor: themedDividerColor,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: isDark ? 0.15 : 0.08,
+          shadowRadius: 4,
+          elevation: isDark ? 3 : 1,
+        },
+        style
       ]}>
         {children}
       </View>
@@ -39,7 +45,7 @@ export default function SettingGroup({ title, children, style }: SettingGroupPro
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 16,
-    marginBottom: 10,
+    marginBottom: 16,
     minHeight: 30,
   },
   groupTitle: {
@@ -48,12 +54,11 @@ const styles = StyleSheet.create({
     fontSize: 13,
     opacity: 0.6,
     height: 20,
+    fontWeight: '500',
   },
   card: {
-    borderRadius: 10,
+    borderRadius: 12,
     overflow: 'hidden',
-    borderWidth: 0.5,
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-    elevation: 1,
+    borderWidth: 0,
   },
 });

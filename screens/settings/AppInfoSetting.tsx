@@ -1,17 +1,20 @@
 import React from 'react';
-import { StyleSheet, View, Linking, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View, Linking, ScrollView, Platform } from 'react-native';
 import { Stack } from 'expo-router';
 import ThemedText from '@/components/common/ThemedText';
 import ThemedLayout from '@/components/common/ThemedLayout';
 import { useTheme } from '@/components/common/ThemeContext';
 import SettingGroup from '@/components/settings/SettingGroup';
 import SettingItem from '@/components/settings/SettingItem';
+import HapticButton from '@/components/common/HapticButton';
 import { appInfo } from '@/config/app';
-import { getThemeColorByTheme } from '@/utils/theme';
+import { getThemeColorByTheme, isDarkTheme } from '@/utils/theme';
 
 export default function AppInfoSetting() {
   const { actualTheme } = useTheme();
+  const isDark = isDarkTheme(actualTheme);
   const themedPrimaryColor = getThemeColorByTheme('primaryColor', actualTheme);
+  const themedCardBgColor = getThemeColorByTheme('cardBackgroundColor', actualTheme);
 
   return (
     <ThemedLayout>
@@ -20,14 +23,30 @@ export default function AppInfoSetting() {
       <ScrollView contentContainerStyle={styles.container}>
 
         <View style={styles.nameContainer}>
-          <View style={[styles.logoContainer, { backgroundColor: themedPrimaryColor }]}>
+          <View style={[
+            styles.logoContainer,
+            {
+              backgroundColor: themedPrimaryColor,
+              shadowOpacity: isDark ? 0.3 : 0.15,
+            }
+          ]}>
             <ThemedText style={styles.logoText}>习惯</ThemedText>
           </View>
           <ThemedText category="h5" style={styles.appName}>{appInfo.name}</ThemedText>
           <ThemedText style={styles.description}>{appInfo.description}</ThemedText>
         </View>
 
-        <SettingGroup>
+        <SettingGroup style={{
+          borderRadius: 16,
+          backgroundColor: themedCardBgColor,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: isDark ? 0.15 : 0.08,
+          shadowRadius: 4,
+          elevation: isDark ? 4 : 2,
+          marginHorizontal: 16,
+          overflow: 'hidden',
+        }}>
           <SettingItem label="版本" isLast={false}>
             <ThemedText>{appInfo.version}</ThemedText>
           </SettingItem>
@@ -42,13 +61,21 @@ export default function AppInfoSetting() {
           </SettingItem>
         </SettingGroup>
 
-        <TouchableOpacity
-          style={[styles.customButton, { backgroundColor: themedPrimaryColor }]}
+        <HapticButton
+          style={[
+            styles.customButton,
+            {
+              backgroundColor: themedPrimaryColor,
+              shadowOpacity: isDark ? 0.3 : 0.15,
+            }
+          ]}
           onPress={() => Linking.openURL(appInfo.repository)}
           activeOpacity={0.7}
+          hapticType="medium"
+          size="large"
         >
           <ThemedText style={styles.buttonText}>查看源代码</ThemedText>
-        </TouchableOpacity>
+        </HapticButton>
 
         <ThemedText style={styles.copyright}>{appInfo.copyright}</ThemedText>
       </ScrollView>
@@ -69,22 +96,25 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   logoContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 20,
+    width: 84,
+    height: 84,
+    borderRadius: 24,
     marginBottom: 15,
     justifyContent: 'center',
     alignItems: 'center',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 8,
+    elevation: 6,
   },
   logoText: {
     color: 'white',
-    fontSize: 30,
+    fontSize: 32,
     fontWeight: 'bold',
   },
   appName: {
     marginBottom: 8,
+    fontWeight: '600',
   },
   description: {
     marginTop: 4,
@@ -95,12 +125,14 @@ const styles = StyleSheet.create({
   customButton: {
     marginTop: 35,
     marginHorizontal: 40,
-    borderRadius: 10,
-    paddingVertical: 14,
+    borderRadius: 14,
+    paddingVertical: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 3,
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 6,
+    elevation: 4,
   },
   buttonText: {
     color: 'white',

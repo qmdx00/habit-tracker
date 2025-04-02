@@ -1,43 +1,63 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, StyleProp, ViewStyle } from 'react-native';
-import { Icon, IconProps } from '@ui-kitten/components';
+import { StyleSheet, TouchableOpacity, StyleProp, ViewStyle, Platform } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/components/common/ThemeContext';
-import { getFloatingButtonPositionStyle, FloatingButtonPosition } from '@/utils/common';
-import { getThemeColorByTheme } from '@/utils/theme';
+import { getFloatingButtonPositionStyle, FloatingButtonPosition, triggerHaptic, HapticFeedbackType } from '@/utils/common';
+import { getThemeColorByTheme, isDarkTheme } from '@/utils/theme';
+
+type IoniconName = React.ComponentProps<typeof Ionicons>['name'];
 
 interface FloatingButtonProps {
   onPress: () => void;
-  icon?: IconProps;
+  icon?: IoniconName;
   color?: string;
   size?: number;
   style?: StyleProp<ViewStyle>;
   position?: FloatingButtonPosition;
+  hapticType?: HapticFeedbackType;
 }
 
 const FloatingButton: React.FC<FloatingButtonProps> = ({
   onPress,
-  icon = 'plus-outline',
+  icon = 'add-outline',
   color = 'white',
   size = 30,
   style,
-  position = 'bottomRight'
+  position = 'bottomRight',
+  hapticType = 'medium'
 }) => {
   const { actualTheme } = useTheme();
   const positionStyle = getFloatingButtonPositionStyle(position);
   const themedPrimaryColor = getThemeColorByTheme('primaryColor', actualTheme);
+  const isDark = isDarkTheme(actualTheme);
+
+  const handlePress = () => {
+    if (Platform.OS === 'android' || Platform.OS === 'ios') {
+      triggerHaptic(hapticType);
+    }
+    if (onPress) {
+      onPress();
+    }
+  };
 
   return (
     <TouchableOpacity
       style={[
         styles.floatingButton,
-        { backgroundColor: themedPrimaryColor },
+        {
+          backgroundColor: themedPrimaryColor,
+          shadowOpacity: isDark ? 0.4 : 0.2,
+          ...(Platform.OS === 'android' && {
+            elevation: isDark ? 8 : 6,
+          }),
+        },
         positionStyle,
         style
       ]}
-      onPress={onPress}
+      onPress={handlePress}
       activeOpacity={0.7}
     >
-      <Icon name={icon} size={size} fill={color} />
+      <Ionicons name={icon} size={size} color={color} />
     </TouchableOpacity>
   );
 };
@@ -45,14 +65,20 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({
 const styles = StyleSheet.create({
   floatingButton: {
     position: 'absolute',
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 5,
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 5,
     zIndex: 999,
+    ...Platform.select({
+      ios: {
+        overflow: 'visible',
+      },
+    }),
   },
 });
 

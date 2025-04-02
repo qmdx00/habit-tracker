@@ -7,11 +7,12 @@ interface ThemedTextProps {
   style?: StyleProp<TextStyle>;
   children?: React.ReactNode;
   category?: FontCategoryType;
+  isBold?: boolean;
   color?: string;
   primary?: boolean;
 }
 
-export default function ThemedText({ children, style, category, color, primary, ...props }: ThemedTextProps) {
+export default function ThemedText({ children, style, category, color, primary, isBold, ...props }: ThemedTextProps) {
   const { actualTheme } = useTheme();
   return (
     <RNText
@@ -19,7 +20,7 @@ export default function ThemedText({ children, style, category, color, primary, 
       style={[
         {
           color: color ?? getThemeColorByTheme('textColor', actualTheme),
-          ...getFontStyleByCategory(category ?? 'p1'),
+          ...getFontStyleByCategory(category ?? 'p1', isBold),
         },
         style
       ]}
