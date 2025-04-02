@@ -28,7 +28,6 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   useEffect(() => {
     const subscription = Appearance.addChangeListener(({ colorScheme }) => {
-      // NOTE: 只有在系统模式下才自动更新
       if (theme === 'system') {
         setThemeValue('system');
       }

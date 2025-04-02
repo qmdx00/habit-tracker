@@ -2,21 +2,17 @@ import { SQLiteDatabase } from 'expo-sqlite';
 import { Habit, HabitRecord } from './types';
 
 export interface HabitRepository {
-  readonly db: SQLiteDatabase;
-
-  getAll: () => Promise<Habit[]>;
-  getById: (id: number) => Promise<Habit | null>;
-  create: (habit: Omit<Habit, 'id' | 'created_at'>) => Promise<number>;
-  update: (habit: Omit<Habit, 'created_at'>) => Promise<void>;
-  delete: (id: number) => Promise<void>;
+  getAll: (db: SQLiteDatabase) => Promise<Habit[]>;
+  getById: (db: SQLiteDatabase, id: number) => Promise<Habit | null>;
+  create: (db: SQLiteDatabase, habit: Omit<Habit, 'id' | 'created_at'>) => Promise<number>;
+  update: (db: SQLiteDatabase, habit: Omit<Habit, 'created_at'>) => Promise<void>;
+  delete: (db: SQLiteDatabase, id: number) => Promise<void>;
 }
 
 export interface HabitRecordRepository {
-  readonly db: SQLiteDatabase;
-
-  getByHabitId: (habitId: number) => Promise<HabitRecord[]>;
-  getByDateRange: (habitId: number, startDate: string, endDate: string) => Promise<HabitRecord[]>;
-  checkRecordExists: (habitId: number, date: string) => Promise<boolean>;
-  create: (record: Omit<HabitRecord, 'id' | 'created_at'>) => Promise<number>;
-  delete: (id: number) => Promise<void>;
+  getByHabitId: (db: SQLiteDatabase, habitId: number) => Promise<HabitRecord[]>;
+  getByDateRange: (db: SQLiteDatabase, habitId: number, startDate: string, endDate: string) => Promise<HabitRecord[]>;
+  checkRecordExists: (db: SQLiteDatabase, habitId: number, date: string) => Promise<boolean>;
+  create: (db: SQLiteDatabase, record: Omit<HabitRecord, 'id' | 'created_at'>) => Promise<number>;
+  delete: (db: SQLiteDatabase, id: number) => Promise<void>;
 }

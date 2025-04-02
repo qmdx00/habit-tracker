@@ -39,7 +39,6 @@ export const getFloatingButtonPositionStyle = (position: FloatingButtonPosition 
   }
 }
 
-
 /**
  * 触发触觉反馈（仅在支持的设备上）
  * @param type 反馈类型
@@ -73,4 +72,26 @@ export const triggerHaptic = async (type: HapticFeedbackType = 'light') => {
   } catch (error) {
     console.warn(error);
   }
+};
+
+/**
+ * 获取今天日期字符串
+ * @returns 今天日期字符串
+ */
+export const getTodayFormatted = () => {
+  const today = new Date();
+  const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+  const weekday = weekdays[today.getDay()];
+  const month = today.getMonth() + 1;
+  const day = today.getDate();
+  return `星期${weekday}，${month}月${day}日`;
+};
+
+/**
+ * 获取当前日期字符串
+ * @returns 当前日期字符串 (YYYY-MM-DD 格式)
+ */
+export const getCurrentDateString = () => {
+  const today = new Date();
+  return today.toISOString().split('T')[0]; // 返回 YYYY-MM-DD 格式
 };
