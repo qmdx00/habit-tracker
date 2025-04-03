@@ -10,9 +10,10 @@ import { useTheme } from "@/components/common/ThemeContext";
 import AddHabitForm from "@/screens/today/AddHabitForm";
 import HabitList from "@/screens/today/HabitList";
 import { getThemeColorByTheme } from "@/utils/theme";
-import { getTodayFormatted } from "@/utils/common";
+import { getTodayFormatted } from "@/utils/date";
 import { habitSQLiteRepository } from "@/data/sqlite";
 import { Habit } from "@/data/types";
+import { handleModalOpen, handleModalClose } from "@/utils/modal";
 
 export default function TodayScreen() {
   const db = useSQLiteContext();
@@ -47,19 +48,15 @@ export default function TodayScreen() {
   }, [loadHabits]);
 
   const handleOpenAddForm = () => {
-    setShowAddForm(true);
+    handleModalOpen(setShowAddForm, 'open');
   };
 
   const handleCloseAddForm = () => {
-    setShowAddForm(false);
+    handleModalClose(setShowAddForm, 'close');
   };
 
   const handleAddSuccess = () => {
     loadHabits();
-  };
-
-  const handlePressHabit = (habit: Habit) => {
-    console.log('handlePressHabit', habit);
   };
 
   const handleRefresh = async () => {
@@ -108,7 +105,6 @@ export default function TodayScreen() {
 
         <HabitList
           habits={habits}
-          onPress={handlePressHabit}
           onRefresh={handleRefresh}
           isRefreshing={isRefreshing}
         />

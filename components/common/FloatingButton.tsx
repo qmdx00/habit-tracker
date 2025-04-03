@@ -2,7 +2,8 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, StyleProp, ViewStyle, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/components/common/ThemeContext';
-import { getFloatingButtonPositionStyle, FloatingButtonPosition, triggerHaptic, HapticFeedbackType } from '@/utils/common';
+import { getFloatingButtonPositionStyle, FloatingButtonPosition } from '@/utils/button';
+import { triggerHaptic, HapticFeedbackType } from '@/utils/haptic';
 import { getThemeColorByTheme, isDarkTheme } from '@/utils/theme';
 
 type IoniconName = React.ComponentProps<typeof Ionicons>['name'];
@@ -24,7 +25,7 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({
   size = 30,
   style,
   position = 'bottomRight',
-  hapticType = 'medium'
+  hapticType = 'none'
 }) => {
   const { actualTheme } = useTheme();
   const positionStyle = getFloatingButtonPositionStyle(position);

@@ -9,9 +9,9 @@ import {
   ViewStyle,
   TextStyle
 } from 'react-native';
-import { triggerHaptic, HapticFeedbackType } from '@/utils/common';
 import { useTheme } from '@/components/common/ThemeContext';
 import { getThemeColorByTheme } from '@/utils/theme';
+import { triggerHaptic, HapticFeedbackType } from '@/utils/haptic';
 
 interface HapticButtonProps extends TouchableOpacityProps {
   onPress?: () => void;

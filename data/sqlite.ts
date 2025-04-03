@@ -1,6 +1,6 @@
 import * as SQLite from 'expo-sqlite';
-import { HabitRepository, HabitRecordRepository } from './repository';
-import { Habit, HabitRecord } from './types';
+import { HabitRepository, HabitRecordRepository } from '@/data/repository';
+import { Habit, HabitRecord } from '@/data/types';
 
 export const habitSQLiteRepository: HabitRepository = {
   getAll: async (db: SQLite.SQLiteDatabase): Promise<Habit[]> => {
@@ -96,6 +96,23 @@ export const habitRecordSQLiteRepository: HabitRecordRepository = {
       throw error;
     } finally {
       await statement.finalizeAsync();
+    }
+  },
+  getCompletedHabitsByDate: async (db: SQLite.SQLiteDatabase, date: string): Promise<Habit[]> => {
+    try {
+      // 使用单一SQL查询获取所有在该日期有打卡记录的习惯
+      const sql = `
+        SELECT h.* FROM habits h
+        INNER JOIN habit_records hr ON h.id = hr.habit_id
+        WHERE date(hr.record_date) = date(?)
+        GROUP BY h.id
+        ORDER BY h.created_at DESC
+      `;
+
+      return await db.getAllAsync<Habit>(sql, [date]);
+    } catch (error) {
+      console.error(`获取 ${date} 的已完成习惯失败:`, error);
+      throw error;
     }
   },
   create: async (db: SQLite.SQLiteDatabase, record: Omit<HabitRecord, 'id' | 'created_at'>): Promise<number> => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, FlatList } from 'react-native';
 import { useTheme } from '@/components/common/ThemeContext';
 import { getThemeColorByTheme, isDarkTheme } from '@/utils/theme';
 import { Habit } from '@/data/types';
@@ -8,12 +8,11 @@ import HabitCheckCard from '@/screens/today/HabitCheckCard';
 
 interface HabitListProps {
   habits: Habit[];
-  onPress?: (habit: Habit) => void;
   onRefresh?: () => void;
   isRefreshing?: boolean;
 }
 
-const HabitList: React.FC<HabitListProps> = ({ habits, onPress, onRefresh, isRefreshing = false }) => {
+const HabitList: React.FC<HabitListProps> = ({ habits, onRefresh, isRefreshing = false }) => {
   const { actualTheme } = useTheme();
   const themedCardBgColor = getThemeColorByTheme('cardBackgroundColor', actualTheme);
   const themedBorderColor = getThemeColorByTheme('borderColor', actualTheme);
@@ -51,17 +50,16 @@ const HabitList: React.FC<HabitListProps> = ({ habits, onPress, onRefresh, isRef
   };
 
   const renderItem = ({ item, index }: { item: Habit, index: number }) => (
-    <TouchableOpacity
+    <View
       style={[
         styles.habitCard,
         getCardStyles(index)
       ]}
-      onPress={() => onPress && onPress(item)}
-      activeOpacity={0.7}
     >
       <HabitCheckCard
         habit={item}
         onCheckSuccess={onRefresh}
+        fullCardClickable={true}
       />
 
       {index < habits.length - 1 && (
@@ -72,7 +70,7 @@ const HabitList: React.FC<HabitListProps> = ({ habits, onPress, onRefresh, isRef
           ]}
         />
       )}
-    </TouchableOpacity>
+    </View>
   );
 
   return (
@@ -104,11 +102,13 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowRadius: 4,
+    shadowOpacity: 0.1,
     elevation: 2,
+    marginBottom: 0,
   },
   separator: {
     height: 0.5,
-    marginLeft: 68,
+    marginLeft: 60,
     opacity: 0.4,
   },
   habitContent: {
@@ -125,13 +125,6 @@ const styles = StyleSheet.create({
   },
   habitDescription: {
     opacity: 0.7,
-  },
-  checkButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });
 

@@ -1,9 +1,9 @@
 import React from 'react';
-import { StyleProp, TextStyle, Text as RNText } from 'react-native';
+import { StyleProp, TextStyle, Text as RNText, TextProps } from 'react-native';
 import { useTheme } from '@/components/common/ThemeContext';
 import { getThemeColorByTheme, getFontStyleByCategory, FontCategoryType } from '@/utils/theme';
 
-interface ThemedTextProps {
+interface ThemedTextProps extends Omit<TextProps, 'style'> {
   style?: StyleProp<TextStyle>;
   children?: React.ReactNode;
   category?: FontCategoryType;

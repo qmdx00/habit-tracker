@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { getThemeColorByTheme } from '@/utils/theme';
 import ThemedText from '@/components/common/ThemedText';
 import { useTheme } from '@/components/common/ThemeContext';
-import { getThemeColorByTheme } from '@/utils/theme';
 
 interface SettingItemProps {
   label: string;

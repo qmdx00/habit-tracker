@@ -1,8 +1,8 @@
 import React, { ReactNode } from 'react';
 import { StyleSheet, View, StyleProp, ViewStyle } from 'react-native';
-import { useTheme } from '@/components/common/ThemeContext';
-import ThemedText from '@/components/common/ThemedText';
 import { getThemeColorByTheme, isDarkTheme } from '@/utils/theme';
+import ThemedText from '@/components/common/ThemedText';
+import { useTheme } from '@/components/common/ThemeContext';
 
 interface SettingGroupProps {
   title?: string;

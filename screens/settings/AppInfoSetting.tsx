@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Linking, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, Linking, ScrollView } from 'react-native';
 import { Stack } from 'expo-router';
 import ThemedText from '@/components/common/ThemedText';
 import ThemedLayout from '@/components/common/ThemedLayout';
